@@ -1,0 +1,112 @@
+/**************************************************************************************** 
+
+Title : Write a program to implement Bellman-Ford Algorithm using 
+           Dynamic Programming and verify the time complexity.
+
+******************************************************************************************/
+
+#include <bits/stdc++.h>
+#include<iostream>
+using namespace std;
+ 
+
+struct Edge//Structure for an edge of a weighted graph...
+{
+    int src, dest, weight;
+};
+ 
+
+struct Graph//Structure representing connections of weighted graph...
+{
+    int Ver, Edg;//Ver:Vertices of graph and Edg:Edges of graph
+    struct Edge* edge;//Graph is represented as an array of edges
+};
+ 
+struct Graph* createGraph(int Ver, int Edg)//Creates a graph with vertices and edges
+{
+    struct Graph* graph = new Graph;
+    graph->Ver = Ver;
+    graph->Edg = Edg;
+    graph->edge = new Edge[Edg];
+    return graph;
+}
+ 
+void display_output(int dist[], int n)
+{
+    printf("\nVertex   Distance from Source\n");
+    for (int i = 0; i < n; ++i)
+        printf("%d \t\t %d\n", i, dist[i]);
+}
+ 
+// The main function that finds shortest distances from src to
+// all other vertices using Bellman-Ford algorithm.  The function
+// also detects negative weight cycle
+void BellmanFord(struct Graph* graph, int src)
+{
+    int Ver = graph->Ver;
+    int Edg = graph->Edg;
+    int dist[Ver];
+ 
+    for (int i = 0; i < Ver; i++)
+        dist[i]   = INT_MAX;
+    dist[src] = 0;
+ 
+    for (int i = 0; i <= Ver; i++)
+    {
+        for (int j = 0; j < Edg; j++)
+        {
+            int u = graph->edge[j].src;
+            int v = graph->edge[j].dest;
+            int weight = graph->edge[j].weight;
+            if (dist[u] != INT_MAX && dist[u] + weight < dist[v])
+                dist[v] = dist[u] + weight;
+        }
+        //display_output(dist, Ver);
+    }
+ 
+    for (int i = 0; i < Edg; i++)
+    {
+        int u = graph->edge[i].src;
+        int v = graph->edge[i].dest;
+        int weight = graph->edge[i].weight;
+        if (dist[u] != INT_MAX && dist[u] + weight < dist[v])
+            printf("Graph contains negative weight cycle");
+    }
+ 
+    display_output(dist, Ver);
+ 
+    return;
+}
+ 
+int main()
+{
+    int Ver,Edg;
+    int src_ver;
+    
+    cout<<"\nEnter the number of vertices in graph: ";
+    cin>>Ver;
+    
+    cout<<"\nEnter the number of edges in graph: ";
+    cin>>Edg;
+    
+    struct Graph* graph = createGraph(Ver, Edg);
+ 
+	for(int i=0;i<Edg;i++)
+	{
+		cout<<"\nEnter Source for edge["<<i<<"] : ";
+		cin>>graph->edge[i].src;
+		cout<<"\nEnter Destination for edge["<<i<<"] : ";
+		cin>>graph->edge[i].dest;
+		cout<<"\nEnter Weight for edge["<<i<<"] : ";
+		cin>>graph->edge[i].weight;	
+		
+		cout<<"\n---------------------------------------";
+	}
+
+	cout<<"\nEnter the source vertices for BellmanFord Algorithm : ";
+	cin>>src_ver;
+		
+    BellmanFord(graph, src_ver);
+ 
+    return 0;
+}
