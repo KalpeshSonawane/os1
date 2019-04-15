@@ -2,9 +2,7 @@
 
 Title : Write a program to solve the travelling salesman problem
            and to print the path and the cost using Dynamic Programming
-Name : kalpesh s. sonawane
-Roll no : 55
- 
+
 ******************************************************************************************/
 
 #include<iostream>
